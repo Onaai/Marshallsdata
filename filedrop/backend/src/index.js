@@ -18,18 +18,8 @@ const app  = express();
 const PORT = process.env.PORT || 3001;
 
 // ── CORS ───────────────────────────────────────
-const allowed = [
-  process.env.FRONTEND_URL,
-  'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'http://localhost:3000',
-].filter(Boolean);
-
 app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowed.includes(origin)) return cb(null, true);
-    cb(new Error(`CORS: origen no permitido → ${origin}`));
-  },
+  origin: true,
   methods: ['GET', 'POST'],
 }));
 
