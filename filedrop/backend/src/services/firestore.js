@@ -34,7 +34,6 @@ function getDb() {
   if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(credential),
-      projectId:  process.env.FIREBASE_PROJECT_ID,
     });
   }
 
