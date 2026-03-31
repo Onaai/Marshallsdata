@@ -16,7 +16,7 @@ const { startCleanupCron } = require('./services/cleanup');
 
 const app  = express();
 const PORT = process.env.PORT || 3001;
-
+app.set('trust proxy', 1);
 // ── CORS ───────────────────────────────────────
 app.use(cors({
   origin: true,

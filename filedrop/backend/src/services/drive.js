@@ -1,55 +1,55 @@
 // src/services/drive.js
 // ══════════════════════════════════════════════
-//  Integración con Google Drive API v3
-//  Service Account — archivos privados en carpeta compartida
+//  Google Drive API v3 — OAuth2 con cuenta personal
+//
+//  Por qué OAuth2 y no Service Account:
+//  Los Service Accounts no tienen cuota de Drive propia.
+//  Con OAuth2 los archivos se suben a tu Drive personal
+//  y cuentan contra tus 15 GB gratuitos de Google.
+//
+//  Variables de entorno requeridas:
+//    GOOGLE_CLIENT_ID
+//    GOOGLE_CLIENT_SECRET
+//    GOOGLE_REFRESH_TOKEN
+//    GOOGLE_DRIVE_FOLDER_ID
 // ══════════════════════════════════════════════
 
-const { google }  = require('googleapis');
+const { google }   = require('googleapis');
 const { Readable } = require('stream');
 
-// ── Auth (singleton) ───────────────────────────
-let _auth = null;
+// ── Auth OAuth2 (singleton) ────────────────────
+let _oauth2Client = null;
 
-function getAuth() {
-  if (_auth) return _auth;
+function getOAuth2Client() {
+  if (_oauth2Client) return _oauth2Client;
 
-  const raw = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-  if (!raw) throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON no está configurado');
+  const clientId     = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
 
-  let credentials;
-  try {
-    credentials = JSON.parse(raw);
-  } catch {
-    throw new Error('GOOGLE_SERVICE_ACCOUNT_JSON no es un JSON válido');
+  if (!clientId || !clientSecret || !refreshToken) {
+    throw new Error(
+      'Faltan variables de entorno de Google OAuth2: ' +
+      'GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN'
+    );
   }
 
-  _auth = new google.auth.GoogleAuth({
-    credentials,
-    scopes: ['https://www.googleapis.com/auth/drive'],
-  });
+  _oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+  _oauth2Client.setCredentials({ refresh_token: refreshToken });
 
-  return _auth;
+  return _oauth2Client;
 }
 
 function getDriveClient() {
-  return google.drive({ version: 'v3', auth: getAuth() });
+  return google.drive({ version: 'v3', auth: getOAuth2Client() });
 }
 
-// ── Subir archivo ─────────────────────────────
-/**
- * @param {Object} opts
- * @param {Buffer} opts.buffer      - Contenido del archivo
- * @param {string} opts.filename    - Nombre con que se guarda en Drive
- * @param {string} opts.mimetype    - MIME type
- * @returns {Promise<string>}       - fileId en Google Drive
- */
+// ── Subir archivo ──────────────────────────────
 async function uploadFile({ buffer, filename, mimetype }) {
-  const drive    = getDriveClient();
   const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
-
   if (!folderId) throw new Error('GOOGLE_DRIVE_FOLDER_ID no está configurado');
 
-  // Buffer → Readable stream
+  const drive  = getDriveClient();
   const stream = new Readable();
   stream.push(buffer);
   stream.push(null);
@@ -69,26 +69,17 @@ async function uploadFile({ buffer, filename, mimetype }) {
   return res.data.id;
 }
 
-// ── Descargar archivo (stream) ────────────────
-/**
- * @param {string} driveFileId
- * @returns {Promise<ReadableStream>}
- */
+// ── Descargar archivo (stream) ─────────────────
 async function downloadFile(driveFileId) {
   const drive = getDriveClient();
-
-  const res = await drive.files.get(
+  const res   = await drive.files.get(
     { fileId: driveFileId, alt: 'media' },
     { responseType: 'stream' }
   );
-
   return res.data;
 }
 
-// ── Eliminar archivo ──────────────────────────
-/**
- * @param {string} driveFileId
- */
+// ── Eliminar archivo ───────────────────────────
 async function deleteFile(driveFileId) {
   const drive = getDriveClient();
   await drive.files.delete({ fileId: driveFileId });
