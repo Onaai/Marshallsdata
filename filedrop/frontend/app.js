@@ -17,7 +17,7 @@ const API_URL = (() => {
   }
   // En producción ajustar a tu URL de Render:
   // return 'https://filedrop-api.onrender.com/api';
-  return 'https://marshallsdata.onrender.com';
+  return 'https://marshallsdata.onrender.com/api';
 })();
 
 // ── Estado ─────────────────────────────────────
