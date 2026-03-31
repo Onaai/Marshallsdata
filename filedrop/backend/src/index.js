@@ -69,6 +69,10 @@ app.get('/api/health', (_req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.send('Backend funcionando 🚀');
+});
+
 // ── 404 ────────────────────────────────────────
 app.use((_req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada.' });
