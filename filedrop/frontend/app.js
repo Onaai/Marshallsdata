@@ -15,8 +15,6 @@ const API_URL = (() => {
   if (h === 'localhost' || h === '127.0.0.1') {
     return 'http://localhost:3001/api';
   }
-  // En producción ajustar a tu URL de Render:
-  // return 'https://filedrop-api.onrender.com/api';
   return 'https://marshallsdata.onrender.com/api';
 })();
 
