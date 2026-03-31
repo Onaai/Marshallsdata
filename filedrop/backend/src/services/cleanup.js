@@ -1,13 +1,19 @@
 // src/services/cleanup.js
 // ══════════════════════════════════════════════
 //  Cron de limpieza automática
-//  Cada hora: busca archivos expirados en Firestore,
-//  los borra de Google Drive y de Firestore.
-//  Si un grupo queda sin archivos, también se elimina.
+//  Al arrancar: limpia docs corruptos de Firestore
+//  Cada hora: busca archivos expirados y los borra
+//  de Google Drive y de Firestore.
 // ══════════════════════════════════════════════
 
 const cron = require('node-cron');
-const { getExpiredFiles, deleteFileById, getFilesByGroup, deleteGroup } = require('./firestore');
+const {
+  getExpiredFiles,
+  deleteFileById,
+  getFilesByGroup,
+  deleteGroup,
+  cleanCorruptedDocs,
+} = require('./firestore');
 const { deleteFile: deleteDriveFile } = require('./drive');
 
 async function runCleanup() {
@@ -16,9 +22,9 @@ async function runCleanup() {
 
   let deleted = 0;
   let errors  = 0;
-  const orphanGroups = new Set(); // Grupos que podrían quedar vacíos
+  const orphanGroups = new Set();
 
-  // 1. Obtener archivos expirados desde Firestore
+  // 1. Obtener archivos expirados (ya filtrados, sin corruptos)
   let expired;
   try {
     expired = await getExpiredFiles();
@@ -34,10 +40,14 @@ async function runCleanup() {
 
   console.log(`[Cleanup] ${expired.length} archivo(s) expirado(s) encontrados.`);
 
-  // 2. Eliminar cada archivo
   for (const file of expired) {
+    // Doble check: saltar si el ID no es válido (no debería pasar con el filtro)
+    if (!file.id || !file.driveFileId) {
+      console.warn('[Cleanup] Saltando archivo con datos inválidos:', file);
+      continue;
+    }
+
     try {
-      // Borrar de Google Drive
       await deleteDriveFile(file.driveFileId);
     } catch (driveErr) {
       const isNotFound = driveErr.code === 404 ||
@@ -46,14 +56,12 @@ async function runCleanup() {
       if (!isNotFound) {
         console.error(`  ✗ Drive error (${file.id}): ${driveErr.message}`);
         errors++;
-        continue; // No borrar de Firestore si Drive falló inesperadamente
+        continue;
       }
-      // Si no existe en Drive, continuar y borrar de Firestore igual
       console.warn(`  ⚠ Ya no existe en Drive: ${file.id}`);
     }
 
     try {
-      // Borrar de Firestore
       await deleteFileById(file.id);
       orphanGroups.add(file.groupId);
       console.log(`  ✓ Eliminado: ${file.originalName} (${file.id})`);
@@ -64,8 +72,9 @@ async function runCleanup() {
     }
   }
 
-  // 3. Limpiar grupos que quedaron sin archivos
+  // 2. Limpiar grupos vacíos
   for (const groupId of orphanGroups) {
+    if (!groupId) continue;
     try {
       const remaining = await getFilesByGroup(groupId);
       if (remaining.length === 0) {
@@ -81,11 +90,15 @@ async function runCleanup() {
 }
 
 function startCleanupCron() {
-  // Ejecutar al arrancar (para procesar lo que quedó pendiente)
+  // Limpiar documentos corruptos que puedan haber quedado de versiones anteriores
+  cleanCorruptedDocs().catch(err =>
+    console.error('[Cleanup] Error limpiando corruptos:', err.message)
+  );
+
+  // Ejecutar limpieza normal al arrancar
   runCleanup().catch(console.error);
 
-  // Luego cada hora en punto: "0 * * * *"
-  // Para probar más rápido: "*/5 * * * *" (cada 5 min)
+  // Luego cada hora en punto
   cron.schedule('0 * * * *', () => {
     runCleanup().catch(console.error);
   });
