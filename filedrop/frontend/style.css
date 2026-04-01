@@ -82,8 +82,11 @@ body {
   left:       -420px;
   width:      380px;
   height:     auto;
-  filter:     drop-shadow(0 0 40px rgba(255,255,255,0.08));
   will-change: transform;
+  /* Glow blanco para que se vea sobre el fondo negro */
+  filter: drop-shadow(0 0 12px rgba(255,255,255,0.5))
+          drop-shadow(0 0 30px rgba(255,255,255,0.2))
+          brightness(1.3);
 }
 
 .gnx-trail {
