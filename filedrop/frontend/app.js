@@ -77,43 +77,42 @@ function fireGNX() {
 
   car.src = GNX_IMG_SRC;
 
+  // Posición vertical aleatoria en cada activación
+  const positions = ['8%', '18%', '30%', '42%', '55%'];
+  stage.style.bottom  = positions[Math.floor(Math.random() * positions.length)];
   stage.style.display = 'block';
 
-  // Reset
+  // Reset — mantener el flip scaleX(-1) en el estado inicial
   car.style.transition   = 'none';
   trail.style.transition = 'none';
-  car.style.transform    = 'translateX(0)';
+  car.style.transform    = 'scaleX(-1)';
   trail.style.width      = '0px';
-  trail.style.left       = '0px';
+  trail.style.opacity    = '1';
 
-  const vw = window.innerWidth;
-  const carW = 380;
+  const vw   = window.innerWidth;
+  const carW = 340;
 
-  // Pequeño delay para que el reset se aplique
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      const duration = 2200; // ms
+      const duration = 2200;
 
-      // Animar auto
-      car.style.transition  = `transform ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
-      car.style.transform   = `translateX(${vw + carW + 80}px)`;
+      // Combinar translateX con scaleX(-1) para mantener el flip
+      car.style.transition = `transform ${duration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+      car.style.transform  = `translateX(${vw + carW + 80}px) scaleX(-1)`;
 
-      // Trail: crece mientras el auto avanza, luego se desvanece
       trail.style.transition = `width ${duration * 0.7}ms ease-out, opacity ${duration * 0.4}ms ease-in ${duration * 0.6}ms`;
-      trail.style.width      = `${vw * 0.7}px`;
-      trail.style.opacity    = '1';
+      trail.style.width      = `${vw * 0.65}px`;
 
-      // Limpiar al terminar
       setTimeout(() => {
         trail.style.opacity = '0';
         setTimeout(() => {
-          stage.style.display = 'none';
-          car.style.transition = 'none';
-          car.style.transform  = 'translateX(0)';
+          stage.style.display    = 'none';
+          car.style.transition   = 'none';
+          car.style.transform    = 'scaleX(-1)';
           trail.style.transition = 'none';
           trail.style.width      = '0';
           trail.style.opacity    = '1';
-          gnxRunning = false;
+          gnxRunning = false; // listo para el próximo
         }, 600);
       }, duration);
     });

@@ -77,26 +77,27 @@ body {
 }
 
 .gnx-car {
-  position:   absolute;
-  bottom:     0;
-  left:       -480px;
-  width:      440px;    /* ← era 380px */
-  height:     auto;
+  position:    absolute;
+  bottom:      0;
+  left:        -440px;
+  width:       340px;
+  height:      auto;
   will-change: transform;
-  filter: drop-shadow(0 0 16px rgba(255,255,255,0.6))
-          drop-shadow(0 0 40px rgba(255,255,255,0.25))
-          brightness(1.4);
+  transform:   scaleX(-1); /* ← invertir horizontalmente */
+  filter: drop-shadow(0 0 14px rgba(255,255,255,0.55))
+          drop-shadow(0 0 35px rgba(255,255,255,0.2))
+          brightness(1.35);
 }
 
 .gnx-trail {
   position:   absolute;
-  bottom:     34px;
+  bottom:     10px; /* ← pegado a las ruedas */
   left:       0;
   height:     2px;
   width:      0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), rgba(255,255,255,0.15));
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.65), rgba(255,255,255,0.15));
   filter:     blur(1px);
-  will-change: width, left;
+  will-change: width, opacity;
 }
 
 /* ── HEADER ─────────────────────────────────── */
