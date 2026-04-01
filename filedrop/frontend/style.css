@@ -186,9 +186,9 @@ body {
 
 .hero-sub {
   font-size:   10px;
-  color:       var(--white-faint);
+  color:       #777;       /* ← era var(--white-faint) */
   letter-spacing: 0.08em;
-  opacity:     0.6;
+  opacity:     1;          /* ← era 0.6 */
 }
 
 /* ── Main ─────────────────────────────────────── */
@@ -372,16 +372,16 @@ body {
 .field-label {
   font-size:      9px;
   letter-spacing: 0.2em;
-  color:          var(--white-dim);
+  color:          #aaa;    /* ← era var(--white-dim) */
   text-transform: uppercase;
 }
 
 .field-hint {
   font-size:  11px;
-  color:      var(--white-faint);
+  color:      #888;        /* ← era var(--white-faint) */
   margin-top: -4px;
   font-style: italic;
-  opacity: 0.7;
+  opacity:    1;           /* ← era 0.7 */
 }
 
 .input-row {
@@ -802,9 +802,11 @@ body {
   border-top:     1px solid var(--border);
   font-size:      9px;
   letter-spacing: 0.2em;
-  color:          var(--white-faint);
+  color:          #aaa;
   text-transform: uppercase;
   margin-top:     auto;
+  text-shadow:    0 0 12px rgba(255,255,255,0.4),
+                  0 0 28px rgba(255,255,255,0.15);  /* ← glow */
 }
 
 .footer-dot { color: var(--border-h); }
