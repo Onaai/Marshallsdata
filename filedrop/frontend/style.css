@@ -66,27 +66,26 @@ body {
 ══════════════════════════════════════════════ */
 .gnx-stage {
   position:   fixed;
-  bottom:     18%;
+  bottom:     12%;
   left:       0;
   width:      100vw;
-  height:     140px;
+  height:     220px;    /* ← era 140px */
   pointer-events: none;
   z-index:    1000;
-  overflow:   hidden;
-  display:    none; /* hidden by default */
+  overflow:   visible;  /* ← era hidden */
+  display:    none;
 }
 
 .gnx-car {
   position:   absolute;
   bottom:     0;
-  left:       -420px;
-  width:      380px;
+  left:       -480px;
+  width:      440px;    /* ← era 380px */
   height:     auto;
   will-change: transform;
-  /* Glow blanco para que se vea sobre el fondo negro */
-  filter: drop-shadow(0 0 12px rgba(255,255,255,0.5))
-          drop-shadow(0 0 30px rgba(255,255,255,0.2))
-          brightness(1.3);
+  filter: drop-shadow(0 0 16px rgba(255,255,255,0.6))
+          drop-shadow(0 0 40px rgba(255,255,255,0.25))
+          brightness(1.4);
 }
 
 .gnx-trail {

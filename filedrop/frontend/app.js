@@ -11,6 +11,8 @@ const API_URL = (() => {
 // GNX: imagen servida como archivo estático por Vercel (gnxegg.png en la misma carpeta)
 // ── GNX Image (Referencia al archivo externo) ──
 const GNX_IMG_SRC = 'gnxegg.png';
+const _gnxPreload = new Image();
+_gnxPreload.src = GNX_IMG_SRC;
 
 // ── Estado ─────────────────────────────────────
 let selectedFiles   = [];
