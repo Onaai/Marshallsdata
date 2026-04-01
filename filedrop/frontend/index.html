@@ -3,97 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FileDrop — Compartí archivos temporalmente</title>
+  <title>FileDrop — Archivos temporales</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- Grain overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
   <!-- ── HEADER ─────────────────────────────── -->
   <header class="header">
     <a class="logo" href="/">
-      <span class="logo-mark">↑</span>
-      FileDrop
+      <span class="logo-bracket">[</span>
+      FILEDROP
+      <span class="logo-bracket">]</span>
     </a>
     <nav class="nav-pills">
-      <button class="nav-pill active" data-tab="upload">Subir</button>
-      <button class="nav-pill" data-tab="access">Acceder</button>
+      <button class="nav-pill active" data-tab="upload">— SUBIR</button>
+      <button class="nav-pill" data-tab="access">— ACCEDER</button>
     </nav>
   </header>
 
   <!-- ── HERO ───────────────────────────────── -->
   <section class="hero">
+    <div class="hero-eyebrow">// transferencia temporal de archivos</div>
     <h1 class="hero-title">
-      Subí archivos.<br>
-      <em>Se borran solos.</em>
+      Subí.<br>Compartí.<br><span class="hero-title-dim">Desaparece.</span>
     </h1>
     <p class="hero-desc">
-      Protegidos con contraseña · Hasta 10 MB por archivo · 
-      Expiran en 24 horas · Sin cuenta
+      Sin cuenta · Protegido con contraseña · 24 horas · Después no queda nada
     </p>
   </section>
 
-  <!-- ── TABS ───────────────────────────────── -->
+  <!-- ── MAIN ───────────────────────────────── -->
   <main class="main">
 
     <!-- ════ TAB: SUBIR ════════════════════════ -->
     <div class="tab-panel active" id="tab-upload">
       <div class="card">
 
-        <div class="card-label">01 — Subir archivos</div>
-        <h2 class="card-title">Elegí tus archivos</h2>
+        <div class="card-index">01</div>
+        <h2 class="card-title">Elegí los archivos</h2>
 
         <!-- Dropzone -->
         <div class="dropzone" id="dropzone" tabindex="0" role="button"
              aria-label="Zona de carga">
           <div class="dropzone-body" id="dropzone-body">
-            <div class="drop-icon">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-                <path d="M16 22V10M16 10L10 16M16 10L22 16" stroke="currentColor"
-                  stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M6 26h20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <p class="drop-text">Arrastrá archivos acá</p>
-            <p class="drop-sub">o <u>hacé click para seleccionar</u> · Hasta 10 archivos · Máx. 10 MB c/u</p>
+            <div class="drop-arrow">↑</div>
+            <p class="drop-text">Arrastrá acá</p>
+            <p class="drop-sub">o click para seleccionar · hasta 10 archivos · máx 10 MB c/u</p>
           </div>
-          <input type="file" id="file-input" class="file-input-hidden"
-                 multiple accept="*/*" />
+          <input type="file" id="file-input" class="file-input-hidden" multiple accept="*/*" />
         </div>
 
-        <!-- Lista de archivos seleccionados -->
+        <!-- Lista archivos seleccionados -->
         <div id="file-list-wrap" style="display:none">
-          <div class="section-label">Archivos seleccionados</div>
+          <div class="section-label">// archivos en cola</div>
           <ul class="file-list" id="file-list"></ul>
         </div>
 
         <!-- Contraseña -->
         <div class="field">
-          <label class="field-label" for="up-password">
-            Contraseña de acceso
-          </label>
-          <p class="field-hint">
-            Usá la misma contraseña para agregar archivos a este grupo después.
-          </p>
+          <label class="field-label" for="up-password">_ CONTRASEÑA DE ACCESO</label>
+          <p class="field-hint">Usá la misma contraseña para agregar archivos después.</p>
           <div class="input-row">
             <input type="password" id="up-password" class="input"
-                   placeholder="Mínimo 4 caracteres" maxlength="128"
+                   placeholder="mínimo 4 caracteres" maxlength="128"
                    autocomplete="new-password" />
             <button class="btn-icon" type="button" data-toggle="up-password"
                     aria-label="Ver contraseña">
-              <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24"
+              <svg class="icon-eye-off" width="16" height="16" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
-                  a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12
-                  4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3
-                  0 1 1-4.24-4.24"/>
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
                 <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
-              <svg class="icon-eye-on" width="18" height="18" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2"
-                style="display:none">
+              <svg class="icon-eye-on" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" style="display:none">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
@@ -110,10 +98,9 @@
         </div>
 
         <button class="btn btn-primary" id="btn-upload" disabled>
-          <span id="btn-upload-label">Subir archivos</span>
+          <span id="btn-upload-label">SUBIR ARCHIVOS</span>
         </button>
 
-        <!-- Resultado upload -->
         <div id="upload-result" class="result-area" style="display:none"></div>
 
       </div>
@@ -123,28 +110,24 @@
     <div class="tab-panel" id="tab-access" style="display:none">
       <div class="card">
 
-        <div class="card-label">02 — Acceder a archivos</div>
+        <div class="card-index">02</div>
         <h2 class="card-title">Ingresá tu contraseña</h2>
 
         <div class="field">
-          <label class="field-label" for="ac-password">Contraseña</label>
+          <label class="field-label" for="ac-password">_ CONTRASEÑA</label>
           <div class="input-row">
             <input type="password" id="ac-password" class="input"
-                   placeholder="Contraseña del grupo" maxlength="128"
+                   placeholder="contraseña del grupo" maxlength="128"
                    autocomplete="current-password" />
             <button class="btn-icon" type="button" data-toggle="ac-password"
                     aria-label="Ver contraseña">
-              <svg class="icon-eye-off" width="18" height="18" viewBox="0 0 24 24"
+              <svg class="icon-eye-off" width="16" height="16" viewBox="0 0 24 24"
                 fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
-                  a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12
-                  4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3
-                  0 1 1-4.24-4.24"/>
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
                 <line x1="1" y1="1" x2="23" y2="23"/>
               </svg>
-              <svg class="icon-eye-on" width="18" height="18" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2"
-                style="display:none">
+              <svg class="icon-eye-on" width="16" height="16" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" style="display:none">
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
@@ -153,17 +136,16 @@
         </div>
 
         <button class="btn btn-primary" id="btn-access">
-          <span id="btn-access-label">Ver mis archivos</span>
+          <span id="btn-access-label">VER MIS ARCHIVOS</span>
         </button>
 
-        <!-- Resultado acceso -->
         <div id="access-result" class="result-area" style="display:none"></div>
 
-        <!-- Lista de archivos del grupo -->
+        <!-- Lista de archivos -->
         <div id="group-files-wrap" style="display:none">
-          <div class="group-files-header">
-            <div class="section-label" id="group-files-label">Archivos del grupo</div>
-            <span class="expiry-badge" id="group-expiry-badge"></span>
+          <div class="group-header">
+            <div class="section-label" id="group-files-label">// archivos disponibles</div>
+            <span class="expiry-tag" id="group-expiry-badge"></span>
           </div>
           <ul class="dl-file-list" id="dl-file-list"></ul>
         </div>
@@ -173,23 +155,23 @@
 
   </main>
 
-  <!-- ── SHARE LINK MODAL ───────────────────── -->
-  <div class="modal-backdrop" id="share-modal" style="display:none" role="dialog"
-       aria-modal="true" aria-labelledby="share-modal-title">
+  <!-- ── SHARE MODAL ────────────────────────── -->
+  <div class="modal-backdrop" id="share-modal" style="display:none" role="dialog">
     <div class="modal">
-      <button class="modal-close" id="modal-close" aria-label="Cerrar">✕</button>
-      <h3 class="modal-title" id="share-modal-title">🔗 Link compartible</h3>
-      <p class="modal-desc">
-        Compartí este link. Quien lo abra deberá ingresar la contraseña para ver los archivos.
-      </p>
+      <button class="modal-close" id="modal-close">✕</button>
+      <div class="modal-label">// link compartible</div>
+      <h3 class="modal-title">Compartí este link</h3>
+      <p class="modal-desc">Quien lo abra necesita la contraseña para ver los archivos.</p>
       <div class="share-link-box" id="share-link-text"></div>
-      <button class="btn btn-secondary" id="btn-copy-link">Copiar link</button>
+      <button class="btn btn-secondary" id="btn-copy-link">COPIAR LINK</button>
     </div>
   </div>
 
   <!-- ── FOOTER ─────────────────────────────── -->
   <footer class="footer">
-    <p>FileDrop · Archivos temporales · 24 hs · Sin cuenta · Sin tracking</p>
+    <span>FILEDROP</span>
+    <span class="footer-sep">·</span>
+    <span>24H · SIN CUENTA · SIN TRACKING</span>
   </footer>
 
   <script src="app.js"></script>
