@@ -78,12 +78,12 @@ body {
 
 .gnx-car {
   position:    absolute;
-  bottom:      0;
+  bottom:      -60px;  /* ← negativo para bajar y compensar el margen del PNG */
   left:        -440px;
   width:       340px;
   height:      auto;
   will-change: transform;
-  transform:   scaleX(-1); /* ← invertir horizontalmente */
+  transform:   scaleX(-1);
   filter: drop-shadow(0 0 14px rgba(255,255,255,0.55))
           drop-shadow(0 0 35px rgba(255,255,255,0.2))
           brightness(1.35);
