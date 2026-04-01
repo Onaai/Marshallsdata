@@ -78,7 +78,7 @@ body {
 
 .gnx-car {
   position:    absolute;
-  bottom:      -60px;  /* ← negativo para bajar y compensar el margen del PNG */
+  bottom:      -90px;  /* ← negativo para bajar y compensar el margen del PNG */
   left:        -440px;
   width:       340px;
   height:      auto;
